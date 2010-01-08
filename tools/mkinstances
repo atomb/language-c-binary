@@ -1,0 +1,3 @@
+HSFILE=../Language/C/Syntax/BinaryInstances.hs
+cat Imports.hs > ${HSFILE}
+runhaskell LCBinary.hs >> ${HSFILE}
