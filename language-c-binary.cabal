@@ -29,3 +29,4 @@ Library
     Hs-Source-Dirs: .
     Exposed-Modules: Language.C.Syntax.BinaryInstances
     Other-Modules: Language.C.Syntax.ManualBinaryInstances
+    GHC-Options: -Wall -fno-warn-orphans
