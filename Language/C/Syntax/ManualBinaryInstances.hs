@@ -15,8 +15,8 @@ instance Binary Ident where
 instance Binary NodeInfo where
   put (OnlyPos p l) = put p >> put l >> put (Nothing :: Maybe Name)
   put (NodeInfo p l n) = put p >> put l >> put (Just n)
-  get = liftM3 mkNodeInfo get get get
-          where mkNodeInfo p l mb = maybe (OnlyPos p l) (NodeInfo p l) mb
+  get = liftM3 mkNode get get get
+          where mkNode p l mb = maybe (OnlyPos p l) (NodeInfo p l) mb
 
 instance Binary Position where
   put p
@@ -28,6 +28,7 @@ instance Binary Position where
                            put (posFile p)
                            put (posRow p)
                            put (posColumn p)
+    | otherwise       = fail "impossible"
 
   get = do _tag <- getWord8
            case _tag of
