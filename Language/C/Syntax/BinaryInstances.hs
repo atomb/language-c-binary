@@ -5,9 +5,11 @@ import Language.C.Syntax.AST
 import Language.C.Syntax.Constants
 import Language.C.Syntax.Ops
 import Language.C.Syntax.ManualBinaryInstances
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CTranslationUnit a) where
   put (CTranslUnit a b) = put a >> put b
   get = get >>= \a -> get >>= \b -> return (CTranslUnit a b)
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CExternalDeclaration a) where
   put (CDeclExt a) = putWord8 0 >> put a
   put (CFDefExt a) = putWord8 1 >> put a
@@ -19,15 +21,19 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CExternalDeclaration a) whe
       1 -> get >>= \a -> return (CFDefExt a)
       2 -> get >>= \a -> get >>= \b -> return (CAsmExt a b)
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CFunctionDef a) where
   put (CFunDef a b c d e) = put a >> put b >> put c >> put d >> put e
   get = get >>= \a -> get >>= \b -> get >>= \c -> get >>= \d -> get >>= \e -> return (CFunDef a b c d e)
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CDeclaration a) where
   put (CDecl a b c) = put a >> put b >> put c
   get = get >>= \a -> get >>= \b -> get >>= \c -> return (CDecl a b c)
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CStructureUnion a) where
   put (CStruct a b c d e) = put a >> put b >> put c >> put d >> put e
   get = get >>= \a -> get >>= \b -> get >>= \c -> get >>= \d -> get >>= \e -> return (CStruct a b c d e)
+
 instance Binary Language.C.Syntax.AST.CStructTag where
   put CStructTag = putWord8 0
   put CUnionTag = putWord8 1
@@ -37,9 +43,11 @@ instance Binary Language.C.Syntax.AST.CStructTag where
       0 -> return CStructTag
       1 -> return CUnionTag
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CEnumeration a) where
   put (CEnum a b c d) = put a >> put b >> put c >> put d
   get = get >>= \a -> get >>= \b -> get >>= \c -> get >>= \d -> return (CEnum a b c d)
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CDeclarationSpecifier a) where
   put (CStorageSpec a) = putWord8 0 >> put a
   put (CTypeSpec a) = putWord8 1 >> put a
@@ -51,6 +59,7 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CDeclarationSpecifier a) wh
       1 -> get >>= \a -> return (CTypeSpec a)
       2 -> get >>= \a -> return (CTypeQual a)
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CStorageSpecifier a) where
   put (CAuto a) = putWord8 0 >> put a
   put (CRegister a) = putWord8 1 >> put a
@@ -68,6 +77,7 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CStorageSpecifier a) where
       4 -> get >>= \a -> return (CTypedef a)
       5 -> get >>= \a -> return (CThread a)
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CTypeSpecifier a) where
   put (CVoidType a) = putWord8 0 >> put a
   put (CCharType a) = putWord8 1 >> put a
@@ -105,6 +115,7 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CTypeSpecifier a) where
       14 -> get >>= \a -> get >>= \b -> return (CTypeOfExpr a b)
       15 -> get >>= \a -> get >>= \b -> return (CTypeOfType a b)
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CTypeQualifier a) where
   put (CConstQual a) = putWord8 0 >> put a
   put (CVolatQual a) = putWord8 1 >> put a
@@ -120,12 +131,15 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CTypeQualifier a) where
       3 -> get >>= \a -> return (CInlineQual a)
       4 -> get >>= \a -> return (CAttrQual a)
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CAttribute a) where
   put (CAttr a b c) = put a >> put b >> put c
   get = get >>= \a -> get >>= \b -> get >>= \c -> return (CAttr a b c)
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CDeclarator a) where
   put (CDeclr a b c d e) = put a >> put b >> put c >> put d >> put e
   get = get >>= \a -> get >>= \b -> get >>= \c -> get >>= \d -> get >>= \e -> return (CDeclr a b c d e)
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CDerivedDeclarator a) where
   put (CPtrDeclr a b) = putWord8 0 >> put a >> put b
   put (CArrDeclr a b c) = putWord8 1 >> put a >> put b >> put c
@@ -137,6 +151,7 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CDerivedDeclarator a) where
       1 -> get >>= \a -> get >>= \b -> get >>= \c -> return (CArrDeclr a b c)
       2 -> get >>= \a -> get >>= \b -> get >>= \c -> return (CFunDeclr a b c)
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CArraySize a) where
   put (CNoArrSize a) = putWord8 0 >> put a
   put (CArrSize a b) = putWord8 1 >> put a >> put b
@@ -146,6 +161,7 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CArraySize a) where
       0 -> get >>= \a -> return (CNoArrSize a)
       1 -> get >>= \a -> get >>= \b -> return (CArrSize a b)
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CInitializer a) where
   put (CInitExpr a b) = putWord8 0 >> put a >> put b
   put (CInitList a b) = putWord8 1 >> put a >> put b
@@ -155,6 +171,7 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CInitializer a) where
       0 -> get >>= \a -> get >>= \b -> return (CInitExpr a b)
       1 -> get >>= \a -> get >>= \b -> return (CInitList a b)
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CPartDesignator a) where
   put (CArrDesig a b) = putWord8 0 >> put a >> put b
   put (CMemberDesig a b) = putWord8 1 >> put a >> put b
@@ -166,6 +183,7 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CPartDesignator a) where
       1 -> get >>= \a -> get >>= \b -> return (CMemberDesig a b)
       2 -> get >>= \a -> get >>= \b -> get >>= \c -> return (CRangeDesig a b c)
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CStatement a) where
   put (CLabel a b c d) = putWord8 0 >> put a >> put b >> put c >> put d
   put (CCase a b c) = putWord8 1 >> put a >> put b >> put c
@@ -203,6 +221,7 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CStatement a) where
       14 -> get >>= \a -> get >>= \b -> return (CReturn a b)
       15 -> get >>= \a -> get >>= \b -> return (CAsm a b)
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CCompoundBlockItem a) where
   put (CBlockStmt a) = putWord8 0 >> put a
   put (CBlockDecl a) = putWord8 1 >> put a
@@ -214,12 +233,15 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CCompoundBlockItem a) where
       1 -> get >>= \a -> return (CBlockDecl a)
       2 -> get >>= \a -> return (CNestedFunDef a)
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CAssemblyStatement a) where
   put (CAsmStmt a b c d e f) = put a >> put b >> put c >> put d >> put e >> put f
   get = get >>= \a -> get >>= \b -> get >>= \c -> get >>= \d -> get >>= \e -> get >>= \f -> return (CAsmStmt a b c d e f)
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CAssemblyOperand a) where
   put (CAsmOperand a b c d) = put a >> put b >> put c >> put d
   get = get >>= \a -> get >>= \b -> get >>= \c -> get >>= \d -> return (CAsmOperand a b c d)
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CExpression a) where
   put (CComma a b) = putWord8 0 >> put a >> put b
   put (CAssign a b c d) = putWord8 1 >> put a >> put b >> put c >> put d
@@ -267,6 +289,7 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CExpression a) where
       19 -> get >>= \a -> get >>= \b -> return (CLabAddrExpr a b)
       20 -> get >>= \a -> return (CBuiltinExpr a)
       _ -> fail "no parse"
+
 instance Binary Language.C.Syntax.Ops.CAssignOp where
   put CAssignOp = putWord8 0
   put CMulAssOp = putWord8 1
@@ -294,6 +317,7 @@ instance Binary Language.C.Syntax.Ops.CAssignOp where
       9 -> return CXorAssOp
       10 -> return COrAssOp
       _ -> fail "no parse"
+
 instance Binary Language.C.Syntax.Ops.CBinaryOp where
   put CMulOp = putWord8 0
   put CDivOp = putWord8 1
@@ -335,6 +359,7 @@ instance Binary Language.C.Syntax.Ops.CBinaryOp where
       16 -> return CLndOp
       17 -> return CLorOp
       _ -> fail "no parse"
+
 instance Binary Language.C.Syntax.Ops.CUnaryOp where
   put CPreIncOp = putWord8 0
   put CPreDecOp = putWord8 1
@@ -360,6 +385,7 @@ instance Binary Language.C.Syntax.Ops.CUnaryOp where
       8 -> return CCompOp
       9 -> return CNegOp
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CBuiltinThing a) where
   put (CBuiltinVaArg a b c) = putWord8 0 >> put a >> put b >> put c
   put (CBuiltinOffsetOf a b c) = putWord8 1 >> put a >> put b >> put c
@@ -371,6 +397,7 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CBuiltinThing a) where
       1 -> get >>= \a -> get >>= \b -> get >>= \c -> return (CBuiltinOffsetOf a b c)
       2 -> get >>= \a -> get >>= \b -> get >>= \c -> return (CBuiltinTypesCompatible a b c)
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CConstant a) where
   put (CIntConst a b) = putWord8 0 >> put a >> put b
   put (CCharConst a b) = putWord8 1 >> put a >> put b
@@ -384,6 +411,8 @@ instance (Binary a) => Binary (Language.C.Syntax.AST.CConstant a) where
       2 -> get >>= \a -> get >>= \b -> return (CFloatConst a b)
       3 -> get >>= \a -> get >>= \b -> return (CStrConst a b)
       _ -> fail "no parse"
+
 instance (Binary a) => Binary (Language.C.Syntax.AST.CStringLiteral a) where
   put (CStrLit a b) = put a >> put b
   get = get >>= \a -> get >>= \b -> return (CStrLit a b)
+
